@@ -1,0 +1,1264 @@
+/* style.css — Halaman Ucapan Ulang Tahun */
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+/* --- DESIGN SYSTEM & CONSTANTS --- */
+:root {
+    --bg-cream: #FAF6F0;
+    --brand-wine: #6B2D3B;
+    --brand-rose: #C97D8C;
+    --brand-blush: #E8B4BC;
+    --brand-sage: #9AB09E;
+    --brand-gold: #DFB15B;
+    --text-dark: #2C2224;
+    --font-heading: 'Playfair Display', serif;
+    --font-script: 'Caveat', cursive;
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* --- BASE STYLES --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    background-color: var(--bg-cream);
+    color: var(--text-dark);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* --- AMBIENT DECORATIVE SHAPES --- */
+.canva-bg-shapes {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.shape {
+    position: absolute;
+    opacity: 0.45;
+    mix-blend-mode: multiply;
+}
+
+.circle-1 {
+    top: -10%;
+    right: -10%;
+    width: 45vw;
+    height: 45vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, #F5DFD6 0%, rgba(245, 223, 214, 0) 70%);
+    filter: blur(40px);
+}
+
+.circle-2 {
+    bottom: -10%;
+    left: -15%;
+    width: 55vw;
+    height: 55vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, #E1E7DB 0%, rgba(225, 231, 219, 0) 70%);
+    filter: blur(50px);
+    opacity: 0.35;
+}
+
+/* --- PARTICLE ANIMATION: FALLING PETALS --- */
+#petal-field {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.petal {
+    position: absolute;
+    top: -5%;
+    font-size: var(--petal-size, 16px);
+    user-select: none;
+    pointer-events: none;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) translateX(var(--drift, 0px)) rotate(var(--spin, 180deg));
+        opacity: 0;
+    }
+}
+
+/* --- PARTICLE ANIMATION: FLOATING HEARTS --- */
+#hearts-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 150;
+    overflow: hidden;
+}
+
+.heart-pop {
+    position: absolute;
+    bottom: -10%;
+    font-size: var(--size, 20px);
+    opacity: 0.8;
+    animation: floatUp 4s ease-in forwards;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+    15% { opacity: 0.8; }
+    100% { transform: translateY(-110vh) translateX(var(--drift, 50px)) scale(1.2) rotate(var(--rot, 20deg)); opacity: 0; }
+}
+
+/* --- ENVELOPE OPENER OVERLAY --- */
+#envelope-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: radial-gradient(ellipse at 50% 40%, #FDF6F0, #E8D8CC 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+    overflow: hidden;
+}
+
+#envelope-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.opener-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.8rem;
+    text-align: center;
+}
+
+.envelope-prompt {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    color: var(--brand-wine);
+    opacity: 0;
+    animation: fadeSlideIn 0.8s 0.3s ease forwards;
+}
+
+.envelope-hint {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brand-rose);
+    opacity: 0;
+    animation: pulse 2s 1.2s infinite, fadeSlideIn 0.6s 1s ease forwards;
+}
+
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+#envelope-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2rem;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Container amplop dengan perspective 3D */
+.envelope-wrap {
+    perspective: 1200px;
+    position: relative;
+    width: 280px;
+    height: 180px;
+    animation: fadeSlideIn 0.7s 0.6s ease forwards;
+    opacity: 0;
+}
+
+/* Partikel sparkle (titik cahaya melayang) */
+.envelope-sparkle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(196, 153, 120, 0.9), transparent 70%);
+    animation: sparkleFloat 3s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.envelope-sparkle.s1 { top: -15px; left: 20%; animation-delay: 0s; width: 5px; height: 5px; }
+.envelope-sparkle.s2 { top: -8px; right: 15%; animation-delay: 0.5s; width: 4px; height: 4px; }
+.envelope-sparkle.s3 { top: 30%; left: -12px; animation-delay: 1s; width: 5px; height: 5px; }
+.envelope-sparkle.s4 { top: 40%; right: -10px; animation-delay: 1.5s; width: 4px; height: 4px; }
+.envelope-sparkle.s5 { bottom: -10px; left: 35%; animation-delay: 0.7s; width: 3px; height: 3px; }
+.envelope-sparkle.s6 { bottom: -5px; right: 30%; animation-delay: 1.2s; width: 5px; height: 5px; }
+
+@keyframes sparkleFloat {
+    0%, 100% { opacity: 0.3; transform: translateY(0) scale(1); }
+    50% { opacity: 1; transform: translateY(-8px) scale(1.4); }
+}
+
+/* Amplop utama */
+.envelope {
+    width: 280px;
+    height: 180px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: envelopeIdle 3s ease-in-out infinite;
+}
+
+@keyframes envelopeIdle {
+    0%, 100% { transform: rotate(-1deg) translateY(0); }
+    50% { transform: rotate(1deg) translateY(-5px); }
+}
+
+/* Shadow realistis di bawah amplop */
+.envelope-shadow {
+    position: absolute;
+    bottom: -18px;
+    left: 10%;
+    width: 80%;
+    height: 20px;
+    background: radial-gradient(ellipse, rgba(120, 70, 50, 0.18), transparent 70%);
+    border-radius: 50%;
+    filter: blur(6px);
+    transition: all 0.8s ease;
+}
+
+/* Bagian belakang amplop */
+.envelope-back {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(165deg, #D4A98C 0%, #C4896C 40%, #B07A63 100%);
+    border-radius: 10px;
+    box-shadow:
+        0 8px 30px rgba(107, 45, 45, 0.2),
+        0 2px 8px rgba(107, 45, 45, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+}
+
+/* Inner lining (pola diagonal terlihat saat flap dibuka) */
+.envelope-lining {
+    position: absolute;
+    inset: 4px;
+    border-radius: 7px;
+    background:
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 6px,
+            rgba(196, 153, 120, 0.15) 6px,
+            rgba(196, 153, 120, 0.15) 7px
+        );
+    opacity: 0;
+    transition: opacity 0.6s 0.3s ease;
+}
+
+/* Surat yang peek dari atas amplop */
+.envelope-letter {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    top: 8%;
+    height: 82%;
+    background: linear-gradient(180deg, #FFFDF9, #FFF8F0);
+    border-radius: 6px;
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.08),
+        inset 0 0 0 1px rgba(196, 153, 120, 0.15);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 14px;
+    transform: translateY(0);
+    transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s;
+    z-index: 1;
+}
+
+.envelope-letter-text {
+    font-family: var(--font-script);
+    color: var(--brand-wine);
+    font-size: 1.2rem;
+    font-weight: 700;
+    opacity: 0.9;
+}
+
+/* Flap penutup atas amplop */
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 54%;
+    background: linear-gradient(170deg, #C4896C 0%, #D4A98C 60%, #C4896C 100%);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Inner side flap (terlihat saat flap terbuka/rotasi) */
+.envelope-flap-inner {
+    position: absolute;
+    inset: 0;
+    background:
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 5px,
+            rgba(255, 255, 255, 0.12) 5px,
+            rgba(255, 255, 255, 0.12) 6px
+        );
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+/* Wax Seal (segel lilin premium) */
+.wax-seal {
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 32%, #E8A0A0, var(--brand-wine) 70%, #6B2D3B);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.9);
+    box-shadow:
+        0 3px 10px rgba(107, 45, 59, 0.35),
+        0 0 20px rgba(196, 120, 130, 0.2),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.15),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    z-index: 4;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.wax-seal svg {
+    width: 18px;
+    height: 18px;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
+}
+
+/* --- STATE: Amplop Terbuka --- */
+.envelope.open {
+    animation: none;
+}
+
+.envelope.open .envelope-flap {
+    transform: rotateX(180deg);
+}
+
+.envelope.open .envelope-letter {
+    transform: translateY(-135%);
+}
+
+.envelope.open .envelope-lining {
+    opacity: 1;
+}
+
+.envelope.open .wax-seal {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3) rotate(20deg);
+}
+
+.envelope.open .envelope-shadow {
+    bottom: -22px;
+    opacity: 0.6;
+    filter: blur(10px);
+}
+
+/* --- MAIN INTERACTION SCREEN LAYOUT --- */
+main {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+main.fade-out-chat {
+    opacity: 0;
+    transform: scale(0.9);
+    pointer-events: none;
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+.chat-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    max-width: 1100px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+/* --- PHONE FRAME CONTAINER (SIMULATION) --- */
+.phone-frame {
+    width: 320px;
+    height: 560px;
+    background: #111111;
+    border-radius: 36px;
+    padding: 8px;
+    box-shadow: 0 25px 50px -12px rgba(107, 45, 59, 0.25);
+    position: relative;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+}
+
+.phone-notch {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110px;
+    height: 18px;
+    background: #111111;
+    border-radius: 0 0 12px 12px;
+    z-index: 50;
+}
+
+.chat-container {
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    border-radius: 28px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    background: #FAF6F0;
+    padding: 24px 16px 12px;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    border-bottom: 1px solid rgba(107, 45, 59, 0.08);
+}
+
+.chat-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--brand-wine);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.chat-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.chat-avatar-fallback {
+    display: none;
+    font-size: 1.1rem;
+}
+
+.chat-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--brand-wine);
+}
+
+.chat-status {
+    font-size: 0.7rem;
+    color: var(--brand-sage);
+    font-weight: 500;
+}
+
+.chat-box {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    background: #FCFBF9;
+}
+
+.chat-box::-webkit-scrollbar { width: 4px; }
+.chat-box::-webkit-scrollbar-thumb { background: var(--brand-blush); border-radius: 2px; }
+
+.chat-bubble {
+    max-width: 80%;
+    padding: 0.75rem 0.9rem;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    word-wrap: break-word;
+    font-weight: 500;
+}
+
+.chat-bubble.incoming {
+    background: #FAF6F0;
+    color: var(--text-dark);
+    align-self: flex-start;
+    border-top-left-radius: 2px;
+}
+
+.chat-bubble.outgoing {
+    background: var(--brand-wine);
+    color: #ffffff;
+    align-self: flex-end;
+    border-top-right-radius: 2px;
+}
+
+.chat-input-bar {
+    padding: 12px;
+    background: #FAF6F0;
+    display: flex;
+    justify-content: center;
+}
+
+.chat-reply-placeholder {
+    width: 100%;
+    padding: 0.55rem 1rem;
+    border-radius: 20px;
+    background: #EDEBE8;
+    color: #A8A09A;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-align: center;
+    user-select: none;
+    pointer-events: none;
+}
+
+.chat-reply-button {
+    background: var(--brand-wine);
+    color: #ffffff;
+    border: none;
+    padding: 0.55rem 1.4rem;
+    border-radius: 20px;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.78rem;
+    cursor: pointer;
+    box-shadow: 0 0 0 0 rgba(107, 45, 59, 0.4);
+    animation: replyPulse 1.8s infinite;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chat-reply-button:hover {
+    background-color: var(--brand-rose);
+    transform: scale(1.03);
+    animation: none; /* Berhenti berdetak saat diarahkan kursor */
+    box-shadow: 0 4px 12px rgba(107, 45, 59, 0.2);
+}
+
+@keyframes replyPulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(107, 45, 59, 0.5);
+    }
+    70% {
+        transform: scale(1.02);
+        box-shadow: 0 0 0 8px rgba(107, 45, 59, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(107, 45, 59, 0);
+    }
+}
+
+/* --- INTERACTIVE CAKE SURPRISE --- */
+#cake-surprise {
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#cake-surprise.cake-hidden {
+    opacity: 0;
+    transform: scale(0.85) translateY(20px);
+    pointer-events: none;
+}
+
+.cake-decorations {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.bubble-wish {
+    background: #ffffff;
+    border: 1px solid var(--brand-blush);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: var(--brand-wine);
+    box-shadow: 0 4px 10px rgba(107, 45, 59, 0.05);
+    animation: floating 3s ease-in-out infinite;
+}
+
+.wish-2 {
+    animation-delay: 1.5s;
+    border-color: var(--brand-gold);
+    color: var(--brand-rose);
+}
+
+@keyframes floating {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.cake-container {
+    width: 160px;
+    height: 130px;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.cake-body {
+    width: 100%;
+    height: 80px;
+    background: var(--brand-rose);
+    border-radius: 12px 12px 0 0;
+    position: absolute;
+    bottom: 0;
+    box-shadow: 0 10px 20px rgba(107, 45, 59, 0.15);
+}
+
+.cake-cream {
+    width: 100%;
+    height: 18px;
+    background: #ffffff;
+    border-radius: 12px 12px 0 0;
+    position: absolute;
+    bottom: 80px;
+    border-bottom: 3px dashed var(--brand-gold);
+}
+
+.candle {
+    width: 10px;
+    height: 40px;
+    background: linear-gradient(to top, #ffffff, var(--brand-gold));
+    position: absolute;
+    bottom: 95px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.flame {
+    width: 14px;
+    height: 25px;
+    background: radial-gradient(circle at center, #ffdd66 0%, #ff8833 60%, var(--brand-wine) 100%);
+    border-radius: 50% 50% 20% 20%;
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 15px #ffaa44;
+    animation: flicker 0.15s ease-in infinite alternate;
+    cursor: pointer;
+}
+
+.flame.blown { display: none; }
+
+@keyframes flicker {
+    0% { transform: translateX(-50%) rotate(-2deg) scale(0.95); }
+    100% { transform: translateX(-50%) rotate(2deg) scale(1.05); }
+}
+
+.birthday-heading {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    color: var(--brand-wine);
+    margin-bottom: 0.5rem;
+}
+
+#cake-instruction {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--brand-gold);
+}
+
+/* --- REVEALED PORTION: WEBSITE CONTAINER --- */
+#birthday-main-page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    position: relative;
+    z-index: 10;
+    transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+#birthday-main-page.main-page-hidden {
+    opacity: 0;
+    transform: translateY(40px);
+    pointer-events: none;
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+/* --- HERO BANNER --- */
+#hero-main {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1.1rem;
+}
+
+#hero-main h1 {
+    font-family: var(--font-script);
+    font-size: clamp(3.2rem, 11vw, 6.5rem);
+    color: var(--brand-wine);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+}
+
+.eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--brand-rose);
+    font-weight: 600;
+}
+
+.hero-sub {
+    font-family: var(--font-heading);
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+    font-style: italic;
+    color: var(--brand-wine);
+    max-width: 460px;
+    opacity: 0.75;
+    line-height: 1.7;
+}
+
+.scroll-cue {
+    margin-top: 3.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brand-rose);
+    animation: bob 2.2s ease-in-out infinite;
+}
+
+@keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+}
+
+/* --- EDITORIAL LETTER SECTION --- */
+#letter-main {
+    padding: 6rem 1.5rem;
+    margin: 4rem 0;
+    height: auto;
+}
+
+.letter-wrapper {
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    height: auto;
+}
+
+.letter-wrapper::before {
+    content: '';
+    position: absolute;
+    left: -2.5rem;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, transparent, var(--brand-blush) 20%, var(--brand-rose) 50%, var(--brand-blush) 80%, transparent);
+    border-radius: 2px;
+}
+
+.letter-dateline {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.letter-dateline::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--brand-blush), transparent);
+}
+
+.letter-dateline span {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--brand-rose);
+    white-space: nowrap;
+}
+
+.letter-greeting {
+    font-family: var(--font-script);
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    color: var(--brand-wine);
+    line-height: 1.2;
+    margin-bottom: 2rem;
+}
+
+.letter-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+    margin-bottom: 3rem;
+    height: auto;
+}
+
+.letter-body p {
+    font-family: var(--font-sans);
+    font-size: 1.08rem;
+    line-height: 1.95;
+    color: #3A2E2A;
+    font-weight: 400;
+}
+
+.letter-body p:first-child::first-letter {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--brand-wine);
+    float: left;
+    line-height: 0.8;
+    margin-right: 0.12em;
+    margin-top: 0.08em;
+}
+
+.letter-sign-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(107, 45, 59, 0.1);
+}
+
+.letter-sign-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brand-rose);
+    font-weight: 600;
+}
+
+.letter-sign {
+    font-family: var(--font-script);
+    font-size: 2.8rem;
+    color: var(--brand-wine);
+    line-height: 1;
+}
+
+/* --- ASYMMETRICAL CHROMATIC BENTO GRID --- */
+#gallery-main {
+    padding: 6rem 0;
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    color: var(--brand-wine);
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.gallery-subtitle {
+    font-size: 0.88rem;
+    color: var(--brand-rose);
+    text-align: center;
+    letter-spacing: 0.08em;
+    margin-bottom: 3.5rem;
+}
+
+.wish-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 240px;
+    gap: 1.8rem;
+}
+
+/* Bento Grid Spacing definitions */
+.wish-text-card:nth-child(1) { grid-column: span 3; grid-row: span 1; }
+.wish-text-card:nth-child(2) { grid-column: span 3; grid-row: span 1; }
+.wish-text-card:nth-child(3) { grid-column: span 2; grid-row: span 1; }
+.wish-text-card:nth-child(4) { grid-column: span 4; grid-row: span 1; }
+.wish-text-card:nth-child(5) { grid-column: span 3; grid-row: span 1; }
+.wish-text-card:nth-child(6) { grid-column: span 3; grid-row: span 1; }
+
+.wish-text-card {
+    position: relative;
+    border-radius: 30px;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    overflow: hidden;
+    backdrop-filter: blur(20px) saturate(110%);
+    -webkit-backdrop-filter: blur(20px) saturate(110%);
+}
+
+.wish-text-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(107, 45, 59, 0.1);
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Color palettes */
+.wish-text-card.color-blush {
+    background: linear-gradient(135deg, rgba(253, 237, 240, 0.75) 0%, rgba(244, 201, 210, 0.5) 100%);
+}
+.wish-text-card.color-sage {
+    background: linear-gradient(135deg, rgba(235, 243, 238, 0.75) 0%, rgba(185, 196, 168, 0.45) 100%);
+}
+.wish-text-card.color-gold {
+    background: linear-gradient(135deg, rgba(253, 247, 231, 0.75) 0%, rgba(223, 177, 91, 0.4) 100%);
+}
+.wish-text-card.color-rose {
+    background: linear-gradient(135deg, rgba(251, 235, 238, 0.75) 0%, rgba(201, 125, 140, 0.45) 100%);
+}
+
+.wish-text-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+.wish-text-card:hover::after {
+    opacity: 1;
+}
+
+.card-number {
+    font-family: var(--font-heading);
+    font-size: 5.5rem;
+    font-weight: 700;
+    position: absolute;
+    bottom: -1rem;
+    right: 2rem;
+    color: rgba(107, 45, 59, 0.04);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.05em;
+    z-index: 0;
+    transition: all 0.5s ease;
+}
+
+.wish-text-card:hover .card-number {
+    transform: translateY(-5px);
+    color: rgba(107, 45, 59, 0.07);
+}
+
+.wish-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.card-tag {
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--brand-wine);
+    opacity: 0.6;
+}
+
+.wish-content h3 {
+    font-family: var(--font-heading);
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--brand-wine);
+    letter-spacing: -0.02em;
+}
+
+.wish-content p {
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    line-height: 1.8;
+    color: #3A2E2A;
+    font-weight: 500;
+    max-width: 90%;
+}
+
+.card-icon {
+    position: absolute;
+    top: 2.5rem;
+    right: 2.5rem;
+    font-size: 1.5rem;
+    opacity: 0.45;
+    z-index: 1;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.wish-text-card:hover .card-icon {
+    transform: scale(1.25) rotate(-15deg);
+    opacity: 0.9;
+}
+
+/* --- CLOSING SECTION --- */
+#closing-main {
+    text-align: center;
+    padding: 6rem 1.5rem;
+}
+
+#closing-main h2 {
+    font-family: var(--font-script);
+    font-size: clamp(2.8rem, 8vw, 4.5rem);
+    color: var(--brand-wine);
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+}
+
+#closing-main .body-text {
+    font-family: var(--font-heading);
+    font-style: italic;
+    max-width: 480px;
+    margin: 0 auto 1.5rem;
+    font-size: 1.15rem;
+    line-height: 1.85;
+    color: var(--brand-wine);
+    opacity: 0.8;
+}
+
+.closing-sign {
+    font-family: var(--font-script);
+    font-size: 1.9rem;
+    color: var(--brand-wine);
+    margin-top: 2.5rem;
+    display: block;
+}
+
+/* --- FLOATING AUDIO CONTROLLER (SQUIRCLE ACTION BUTTON) --- */
+#music-toggle {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 200;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(107, 45, 59, 0.15);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(107, 45, 59, 0.12);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    color: var(--brand-wine);
+}
+
+.music-icon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.music-icon.icon-play {
+    display: block;
+}
+.music-icon.icon-mute {
+    display: none;
+}
+
+#music-toggle.playing {
+    background: var(--brand-wine);
+    border-color: var(--brand-wine);
+    color: #ffffff;
+    box-shadow: 0 10px 25px rgba(107, 45, 59, 0.25);
+    animation: breathing 3s ease-in-out infinite alternate;
+}
+
+#music-toggle.playing .music-icon.icon-play {
+    display: none;
+}
+#music-toggle.playing .music-icon.icon-mute {
+    display: block;
+}
+
+#music-toggle:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(107, 45, 59, 0.18);
+}
+
+@keyframes breathing {
+    0% { transform: translateY(0) scale(1); }
+    100% { transform: translateY(-2px) scale(1.04); }
+}
+
+/* --- SCROLL-ANIMATION TRIGGERS --- */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- MEDIA QUERY QUIRKS & RESPONSIVENESS --- */
+@media (max-width: 1024px) {
+    .wish-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: minmax(220px, auto);
+        gap: 1.5rem;
+    }
+    .wish-text-card:nth-child(1),
+    .wish-text-card:nth-child(2),
+    .wish-text-card:nth-child(3),
+    .wish-text-card:nth-child(4),
+    .wish-text-card:nth-child(5),
+    .wish-text-card:nth-child(6) {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+}
+
+@media (max-width: 900px) {
+    .letter-wrapper::before {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        padding: 1rem;
+    }
+
+    .chat-layout {
+        flex-direction: column;
+        gap: 3rem;
+    }
+
+    #cake-surprise {
+        max-width: 320px;
+    }
+
+    .wish-cards-grid {
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+        gap: 1.2rem;
+    }
+
+    .wish-text-card {
+        min-height: auto;
+        padding: 2rem 1.5rem;
+        border-radius: 20px;
+    }
+
+    .wish-content h3 {
+        font-size: 1.35rem;
+    }
+
+    .wish-content p {
+        font-size: 0.88rem;
+        max-width: 100%;
+    }
+
+    .card-icon {
+        top: 2rem;
+        right: 1.5rem;
+        font-size: 1.3rem;
+    }
+
+    .card-number {
+        font-size: 4rem;
+        bottom: -0.5rem;
+        right: 1rem;
+    }
+
+    #letter-main {
+        padding: 3rem 1rem;
+    }
+
+    #music-toggle {
+        bottom: 1.5rem;
+        right: 1.5rem;
+    }
+
+    /* Envelope scaling agar pas di layar kecil */
+    .envelope-wrap {
+        transform: scale(0.85);
+        transform-origin: center center;
+    }
+
+    .envelope-prompt {
+        font-size: clamp(1rem, 4vw, 1.4rem);
+        padding: 0 1rem;
+    }
+}
+
+/* Accessibility: Motion optimization */
+@media (prefers-reduced-motion: reduce) {
+    .shape, .petal, .heart-pop, .flame { animation: none !important; }
+    .chat-reply-button, #envelope-btn { transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+    .envelope, .envelope-sparkle, .envelope-prompt, .envelope-hint, .envelope-wrap {
+        animation: none !important;
+        opacity: 1 !important;
+    }
+}

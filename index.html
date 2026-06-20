@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Halaman ucapan ulang tahun interaktif khusus.">
+    <title>Surat Spesial Untukmu 🤍</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Link Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Ambient Shapes & Background Effects -->
+    <div class="canva-bg-shapes" aria-hidden="true">
+        <div class="shape circle-1"></div>
+        <div class="shape circle-2"></div>
+    </div>
+
+    <!-- Particle Containers -->
+    <div id="petal-field" aria-hidden="true"></div>
+    <div id="hearts-container" aria-hidden="true"></div>
+
+    <!-- Envelope Screen Overlay (Layar Pembuka) -->
+    <div id="envelope-screen">
+        <div class="opener-content">
+            <p class="envelope-prompt">Ada pesan masuk dari seseorang...</p>
+            <button id="envelope-btn" aria-label="Buka pesan">
+                <div class="envelope-wrap">
+                    <!-- Sparkle Dots (dekorasi partikel) -->
+                    <div class="envelope-sparkle s1"></div>
+                    <div class="envelope-sparkle s2"></div>
+                    <div class="envelope-sparkle s3"></div>
+                    <div class="envelope-sparkle s4"></div>
+                    <div class="envelope-sparkle s5"></div>
+                    <div class="envelope-sparkle s6"></div>
+
+                    <div class="envelope">
+                        <!-- Shadow element untuk efek 3D -->
+                        <div class="envelope-shadow"></div>
+
+                        <!-- Bagian belakang amplop + inner lining -->
+                        <div class="envelope-back">
+                            <div class="envelope-lining"></div>
+                        </div>
+
+                        <!-- Surat yang keluar saat dibuka -->
+                        <div class="envelope-letter">
+                            <span class="envelope-letter-text">Buka ♡</span>
+                        </div>
+
+                        <!-- Flap penutup atas amplop -->
+                        <div class="envelope-flap">
+                            <div class="envelope-flap-inner"></div>
+                        </div>
+
+                        <!-- Segel lilin (wax seal) -->
+                        <div class="wax-seal">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </button>
+            <p class="envelope-hint">ketuk amplop untuk membuka</p>
+        </div>
+    </div>
+
+    <!-- Chat & Cake Surprise Layout (Layar Utama Tahap 1) -->
+    <main id="main-content">
+        <div class="chat-layout">
+
+            <!-- Smartphone Frame UI -->
+            <div class="phone-frame">
+                <div class="phone-notch"></div>
+                <div class="chat-container">
+
+                    <!-- Chat Header -->
+                    <div class="chat-header">
+                        <div class="chat-avatar">
+                            <img src="profil.webp" alt="Foto Profil"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <span class="chat-avatar-fallback">💝</span>
+                        </div>
+                        <div class="chat-meta">
+                            <span class="chat-name">Akhdan</span>
+                            <span class="chat-status">online</span>
+                        </div>
+                    </div>
+
+                    <!-- Chat Message Area -->
+                    <div class="chat-box" id="chat-box"></div>
+
+                    <!-- Chat Reply Bar & Placeholder Loader -->
+                    <div class="chat-input-bar">
+                        <div id="chat-reply-placeholder" class="chat-reply-placeholder">Tunggu balasan...</div>
+                        <button id="chat-reply-btn" class="chat-reply-button" style="display: none;"></button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Candle & Cake Surprise Section -->
+            <div id="cake-surprise" class="cake-hidden">
+                <div class="cake-decorations">
+                    <span class="bubble-wish wish-1">Happy Birthdayy! 🎉</span>
+                    <span class="bubble-wish wish-2">Make a Wish 💫</span>
+                </div>
+
+                <div class="cake-container">
+                    <div class="candle">
+                        <div class="flame" id="candle-flame"></div>
+                    </div>
+                    <div class="cake-cream"></div>
+                    <div class="cake-body"></div>
+                </div>
+
+                <h2 class="script-text birthday-heading">Selamat Ulang Tahun, Kalycaa!</h2>
+                <p id="cake-instruction">Tiup lilinnya dengan mengetuk apinya!</p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Birthday Main Page Content (Layar Utama Tahap 2 - Muncul setelah tiup lilin) -->
+    <div id="birthday-main-page" class="main-page-hidden">
+
+        <!-- Hero Section -->
+        <section id="hero-main">
+            <p class="eyebrow reveal">&mdash; Hari Spesial &mdash;</p>
+            <h1 class="reveal">Selamat Ulang Tahun,<br>Kalycaa!</h1>
+            <p class="hero-sub reveal">Semoga hari ini penuh dengan kebahagiaan, tawa, dan semua hal baik yang kamu
+                semogakan.</p>
+            <p class="scroll-cue">&darr; gulir ke bawah</p>
+        </section>
+
+        <!-- Greeting Letter Section -->
+        <section id="letter-main">
+            <div class="letter-wrapper reveal">
+
+                <div class="letter-dateline">
+                    <span>Hari Istimewa ini</span>
+                </div>
+
+                <p class="letter-greeting">Haii Sayangg,</p>
+
+                <div class="letter-body">
+                    <p>Selamat bertambah usiaa yaa! Serta mulia panjang umurnya, panjang juga tenangnya. Semoga di usia
+                        yang baru, hal-hal baik datang dengan langkah yang pelan tapi menetap, semoga hatimu tetap
+                        lembut, tetap kuat melewati banyak hal, dan tetap menjadi rumah yang nyaman untuk dirimu
+                        sendiri.</p>
+                    <p>Terima kasih sudah bertahan sejauh ini, meski dunia kadang tidak selalu ramah, semoga semesta
+                        selalu menjaga langkahmu, dipertemukan dengan orang-orang yang tulus, dijauhkan dari kecewa yang
+                        terlalu dalam, dan diberi lebih banyak hari untuk merasa cukup dan dicintai</p>
+                    <p>Semoga apa pun impian dan harapan yang kamu simpan dalam hati segera menjadi kenyataan. Selamat
+                        merayakan hari terbaikmu sayang! I Love You More</p>
+                </div>
+
+                <div class="letter-sign-block">
+                    <span class="letter-sign-label">dengan tulus,</span>
+                    <span class="letter-sign">Akhdan</span>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Stained Glass Bento Grid Section -->
+        <section id="gallery-main">
+            <h2 class="section-title reveal">Harapan &amp; Doa</h2>
+            <p class="gallery-subtitle reveal">Harapan tulus yang kutuliskan khusus untukmu</p>
+
+            <div class="wish-cards-grid">
+
+                <!-- Wish Card 01 -->
+                <div class="wish-text-card color-blush reveal">
+                    <div class="card-number">01</div>
+                    <div class="wish-content">
+                        <span class="card-tag">Wish 01</span>
+                        <h3>Kebahagiaan</h3>
+                        <p>"Semoga senyum di wajahmu tidak pernah pudar oleh apa pun, hari ini dan selamanya. Aku selalu
+                            suka melihat caramu tertawa lepas."</p>
+                    </div>
+                    <div class="card-icon">🌸</div>
+                </div>
+
+                <!-- Wish Card 02 -->
+                <div class="wish-text-card color-sage reveal">
+                    <div class="card-number">02</div>
+                    <div class="wish-content">
+                        <span class="card-tag">Wish 02</span>
+                        <h3>Kesehatan</h3>
+                        <p>"Semoga tubuh dan pikiranmu selalu dijaga, diberi kekuatan ekstra di setiap harinya, dan
+                            dijauhkan dari lelah yang berlebihan."</p>
+                    </div>
+                    <div class="card-icon">🍃</div>
+                </div>
+
+                <!-- Wish Card 03 -->
+                <div class="wish-text-card color-gold reveal">
+                    <div class="card-number">03</div>
+                    <div class="wish-content">
+                        <span class="card-tag">Wish 03</span>
+                        <h3>Kesuksesan</h3>
+                        <p>"Semoga segala usaha yang sedang kamu perjuangkan saat ini diberikan kelancaran dan kemudahan
+                            yang luar biasa."</p>
+                    </div>
+                    <div class="card-icon">✨</div>
+                </div>
+
+                <!-- Wish Card 04 -->
+                <div class="wish-text-card color-rose reveal">
+                    <div class="card-number">04</div>
+                    <div class="wish-content">
+                        <span class="card-tag">Wish 04</span>
+                        <h3>Impian</h3>
+                        <p>"Semoga satu per satu rencana indah yang diam-diam kamu simpan dan usahakan, terwujud nyata
+                            dengan cara terbaik."</p>
+                    </div>
+                    <div class="card-icon">🌷</div>
+                </div>
+
+                <!-- Wish Card 05 -->
+                <div class="wish-text-card color-blush reveal">
+                    <div class="card-number">05</div>
+                    <div class="wish-content">
+                        <span class="card-tag">Wish 05</span>
+                        <h3>Kedamaian</h3>
+                        <p>"Semoga hatimu selalu tenang, dipenuhi kedamaian, dan dikelilingi oleh orang-orang yang tulus
+                            menyayangimu."</p>
+                    </div>
+                    <div class="card-icon">🕊️</div>
+                </div>
+
+                <!-- Wish Card 06 -->
+                <div class="wish-text-card color-sage reveal">
+                    <div class="card-number">06</div>
+                    <div class="wish-content">
+                        <span class="card-tag">Wish 06</span>
+                        <h3>Hari Ini</h3>
+                        <p>"Nikmati hari ini sepenuhnya. Karena hari ini adalah hari yang indah yang diciptakan khusus
+                            untukmu."</p>
+                    </div>
+                    <div class="card-icon">🎂</div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Closing Footer Section -->
+        <section id="closing-main" class="reveal">
+            <h2>Selamat Ulang Tahun sekali lagi yaa sayangg!</h2>
+            <p class="body-text">Semoga tahun ini menjadi tahun yang paling menyenangkan bagimu.</p>
+            <span class="closing-sign">I Love You More 🤍</span>
+        </section>
+
+    </div>
+
+    <!-- Music Player Controller (Audio & Squircle Button) -->
+    <button id="music-toggle" aria-label="Mute/Play Musik">
+        <svg class="music-icon icon-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+        <svg class="music-icon icon-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+    </button>
+    <audio id="bg-audio" loop src="lagu.mp3"></audio>
+
+    <!-- Main Logic Script -->
+    <script src="script.js"></script>
+
+</body>
+
+</html>
